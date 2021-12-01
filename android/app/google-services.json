@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "358732541449",
+    "project_id": "crypto-link-44dd8",
+    "storage_bucket": "crypto-link-44dd8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358732541449:android:834cf12abcd19dbb4c12d8",
+        "android_client_info": {
+          "package_name": "com.example.crypto_link"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358732541449-fcu84u1ubcjmmgi5q5fecafe05kgnntu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAwqLn77Ywhy5DqJsuy6BCSBzn-8gMINU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358732541449-fcu84u1ubcjmmgi5q5fecafe05kgnntu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

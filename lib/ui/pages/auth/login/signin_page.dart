@@ -1,3 +1,5 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/ui/widgets/widget_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -13,114 +15,147 @@ class SignIn extends StatefulWidget {
 }
 
 class _State extends State<SignIn> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  AuthController controllerAuth = Get.find();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  // Que hace la variable GlobalKey
+  final _formKey = GlobalKey<FormState>();
+
+  bool isEmail(String em) {
+    String p =
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
+
+    RegExp regExp = RegExp(p);
+
+    return regExp.hasMatch(em);
+  }
+
+  bool characters(String e) {
+    int length = e.length;
+    if (length < 6) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.only(
-            left: MediaQuery.of(context).size.width * 0.07,
-            right: MediaQuery.of(context).size.width * 0.07),
-        child: SingleChildScrollView(
-          child: Column(children: <Widget>[
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-            ),
-            Text("Welcome Back!",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headline1),
-            Padding(
-              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.51,
-                  height: MediaQuery.of(context).size.height * 0.24,
-                  child: SvgPicture.asset(
-                      'assets/undraw_access_account_re_8spm.svg')),
-            ),
-            inputRegister(
-                paddingHeight: 0.00,
-                text: "Enter your email",
-                controller: emailController),
-            inputRegister(
+    return Form(
+      key: _formKey,
+      child: Container(
+          margin: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * 0.07,
+              right: MediaQuery.of(context).size.width * 0.07),
+          child: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.15,
+              ),
+              Text("Welcome Back!",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline1),
+              Padding(
+                padding:
+                    EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.51,
+                    height: MediaQuery.of(context).size.height * 0.24,
+                    child: SvgPicture.asset(
+                        'assets/undraw_access_account_re_8spm.svg')),
+              ),
+              WidgetTextField(
+                  key: const Key('email'),
+                  paddingHeight: 0.00,
+                  text: "Enter your email",
+                  controller: _emailController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Por favor ingrese su E-mail.";
+                    } else if (!isEmail(value)) {
+                      return "Por favor ingrese un E-mail valido.";
+                    }
+                  }),
+              WidgetTextField(
+                key: const Key('password'),
+                obscure: true,
                 paddingHeight: 0.07,
                 text: "Enter password",
-                controller: passwordController),
-            Padding(
-              padding:
-                  EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.01),
-              child: TextButton(
-                onPressed: widget.onViewSwitch,
-                child: Text('Forgot Password',
-                    style: GoogleFonts.lato(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.italic,
-                    )),
-              ),
-            ),
-            Padding(
-              padding:
-                  EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.01),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(60),
-                ),
-                onPressed: () {
-                  Get.offNamed('/content');
+                controller: _passwordController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Por favor ingrese su Contrasena.";
+                  } else if (!characters(value)) {
+                    return "Se requieren minimo 6 caracteres";
+                  }
                 },
-                child: Text('Login',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline1),
               ),
-            ),
-            Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.tight,
-                  flex: 2,
-                  child: Text("Don't have an account?",
-                      textAlign: TextAlign.right,
-                      style: Theme.of(context).textTheme.headline3),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.01),
+                child: TextButton(
+                  onPressed: () {},
+                  child: Text('Forgot Password',
+                      style: GoogleFonts.lato(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.italic,
+                      )),
                 ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  flex: 1,
-                  child: TextButton(
-                    onPressed: widget.onViewSwitch,
-                    child: Text('Sign Up',
-                        style: GoogleFonts.lato(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.italic,
-                        )),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.01),
+                child: ElevatedButton(
+                  key: const Key('logInButton'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(60),
                   ),
+                  onPressed: () {
+                    final form = _formKey.currentState;
+                    form!.save();
+                    if (form.validate()) {
+                      controllerAuth.logIn();
+                      Get.offNamed('/content');
+                      print(controllerAuth.authController);
+                    } else {
+                      Get.snackbar(
+                        "Error",
+                        "Ha ocurrido un error al ingresar",
+                      );
+                    }
+                  },
+                  child: Text('Login',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline1),
                 ),
-              ],
-            )
-          ]),
-        ));
-  }
-
-  Padding inputRegister(
-      {required double paddingHeight,
-      required String text,
-      required TextEditingController controller}) {
-    return Padding(
-      padding: EdgeInsets.only(
-          top: MediaQuery.of(context).size.width * paddingHeight),
-      child: TextField(
-          controller: controller,
-          decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              border: const OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              hintText: text,
-              hintStyle: const TextStyle(
-                  fontStyle: FontStyle.italic,
-                  fontSize: 16,
-                  color: Colors.grey))),
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    flex: 2,
+                    child: Text("Don't have an account?",
+                        textAlign: TextAlign.right,
+                        style: Theme.of(context).textTheme.headline3),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    flex: 1,
+                    child: TextButton(
+                      key: const Key('switchLogOut'),
+                      onPressed: widget.onViewSwitch,
+                      child: Text('Sign Up',
+                          style: GoogleFonts.lato(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.italic,
+                          )),
+                    ),
+                  ),
+                ],
+              )
+            ]),
+          )),
     );
   }
 }

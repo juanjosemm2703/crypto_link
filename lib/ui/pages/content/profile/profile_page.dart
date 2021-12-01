@@ -15,7 +15,8 @@ class _State extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return ListView(
       children: <Widget>[
-        Expanded(
+        Padding(
+          padding: const EdgeInsets.only(top: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

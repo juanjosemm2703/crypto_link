@@ -2,7 +2,8 @@ import 'package:crypto_link/ui/widgets/card.dart';
 import 'package:flutter/material.dart';
 
 class StateCard extends StatelessWidget {
-  final String title, content, picUrl, date;
+  final String title, content, date;
+  final String picUrl;
   final VoidCallback onChat;
 
   // StateCard constructor

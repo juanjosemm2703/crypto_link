@@ -1,3 +1,5 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/online/onlinechat_screen.dart';
 import 'package:crypto_link/ui/pages/content/post/new_post.dart';
 import 'package:crypto_link/ui/pages/content/profile/profile_page.dart';
@@ -35,7 +37,8 @@ class _State extends State<ContentPage> {
           break;
         case 2:
           _content = const ChatScreen();
-          _floattingIcon = const Icon(Icons.message, color: Colors.white);
+          _floattingIcon =
+              const Icon(Icons.person_add_alt_1, color: Colors.white);
           floattingSwitch = 2;
           break;
         case 3:
@@ -60,7 +63,8 @@ class _State extends State<ContentPage> {
           break;
         case 2:
           _content = const OnlinePeopleScreen();
-          _floattingIcon = const Icon(Icons.message, color: Colors.white);
+          _floattingIcon =
+              const Icon(Icons.person_add_alt_1, color: Colors.white);
           break;
         case 3:
           _content = const ProfileScreen();
@@ -72,71 +76,76 @@ class _State extends State<ContentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(fit: StackFit.expand, children: <Widget>[
-      CustomPaint(
-          painter: BackgroundPainter(
-              fondo: Theme.of(context).colorScheme.background,
-              blur: Theme.of(context).colorScheme.primary)),
-      Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: CustomAppBar(
-            picUrl:
-                'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg',
-            titulo: Text("Crypto Link",
-                style: Theme.of(context).textTheme.headline1),
-            context: context,
-            onSignOff: () {
-              Get.offNamed('/auth');
-            },
-            onProfile: () {
-              _onFlottingTapped(3);
-            }),
+    Get.put(AuthController());
+    AuthController controllerAuth = Get.find();
 
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              child: _content,
+    return Stack(
+        key: const Key('contentPage'),
+        fit: StackFit.expand,
+        children: <Widget>[
+          CustomPaint(
+              painter: BackgroundPainter(
+                  fondo: Theme.of(context).colorScheme.background,
+                  blur: Theme.of(context).colorScheme.primary)),
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: CustomAppBar(
+                picUrl:
+                    'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg',
+                titulo: Text("Crypto Link",
+                    style: Theme.of(context).textTheme.headline1),
+                context: context,
+                onSignOff: () {
+                  controllerAuth.logOut();
+                  Get.offNamed('/auth');
+                  // print(controllerAuth.authController);
+                },
+                onProfile: () {
+                  _onFlottingTapped(3);
+                }),
+
+            body: SafeArea(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: _content,
+              ),
+            ),
+
+            // Content screen navbar
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.shifting,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: 'States',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.chat_bubble_outline),
+                  label: 'Chat',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.notifications_none_outlined),
+                  label: 'Notifications',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+            ),
+
+            floatingActionButton: FloatingActionButton(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: _floattingIcon,
+              ),
+              onPressed: () {
+                _onFlottingTapped(floattingSwitch);
+              },
             ),
           ),
-        ),
-
-        // Content screen navbar
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_filled),
-              label: 'States',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_outline),
-              label: 'Chat',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_none_outlined),
-              label: 'Notifications',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
-
-        floatingActionButton: FloatingActionButton(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            child: _floattingIcon,
-          ),
-          onPressed: () {
-            _onFlottingTapped(floattingSwitch);
-          },
-        ),
-      ),
-    ]);
+        ]);
   }
 }

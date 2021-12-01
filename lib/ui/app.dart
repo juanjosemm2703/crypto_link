@@ -1,5 +1,6 @@
 import 'package:crypto_link/ui/pages/auth/auth_page.dart';
 import 'package:crypto_link/ui/pages/content/content_page.dart';
+
 import 'package:crypto_link/ui/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

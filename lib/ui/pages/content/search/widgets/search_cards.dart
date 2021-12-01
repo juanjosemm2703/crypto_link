@@ -1,4 +1,3 @@
-import 'package:crypto_link/ui/widgets/card.dart';
 import 'package:flutter/material.dart';
 
 class SearchCard extends StatelessWidget {

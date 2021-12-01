@@ -1,6 +1,9 @@
+import 'package:crypto_link/data/models/chat.dart';
 import 'package:crypto_link/ui/pages/content/chat/widgets/chat_cards.dart';
+import 'package:crypto_link/ui/pages/content/messages/messages_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -10,18 +13,26 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _State extends State<ChatScreen> {
-  final items = List<String>.generate(20, (i) => "Item $i");
-
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: items.length,
+      itemCount: chatsData.length,
       itemBuilder: (context, index) {
-        return const ChatCard(
-            title: 'Juan Jose Martinez Monsalve',
-            picUrl:
-                'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
-            content: "You: Hola, como estas?");
+        return ChatCard(
+            press: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Messages(
+                            isActivate: chatsData[index].isActive,
+                            name: chatsData[index].name,
+                            picUrl: chatsData[index].image,
+                          )));
+            },
+            title: chatsData[index].name,
+            picUrl: chatsData[index].image,
+            content: chatsData[index].lastMessage,
+            isActive: chatsData[index].isActive);
       },
     );
   }

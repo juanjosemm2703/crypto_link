@@ -1,7 +1,9 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/ui/pages/auth/signup/singup_page.dart';
 import 'package:crypto_link/ui/pages/auth/welcome/welcome_page.dart';
 import 'package:crypto_link/ui/widgets/background.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'login/signin_page.dart';
 
@@ -45,6 +47,7 @@ class _State extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(AuthController());
     return Stack(fit: StackFit.expand, children: <Widget>[
       CustomPaint(
           painter: BackgroundPainter(

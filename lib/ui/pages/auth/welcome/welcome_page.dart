@@ -48,6 +48,7 @@ class _State extends State<WelcomeScreen> {
                   left: MediaQuery.of(context).size.width * 0.07,
                   right: MediaQuery.of(context).size.width * 0.07),
               child: ElevatedButton(
+                key: const Key('welcomeButton'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(60),
                 ),
