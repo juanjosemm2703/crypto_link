@@ -1,5 +1,7 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/ui/pages/content/profile/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -13,6 +15,7 @@ class _State extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AuthController controllerAuth = Get.find();
     return ListView(
       children: <Widget>[
         Padding(
@@ -30,7 +33,7 @@ class _State extends State<ProfileScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10.0, bottom: 15),
-                child: Text("Diana L. Vera O",
+                child: Text(controllerAuth.userEmail(),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline1),
               ),
@@ -53,8 +56,8 @@ class _State extends State<ProfileScreen> {
             ],
           ),
         ),
-        const ProfileCard(
-          title: 'Diana L. Vera O',
+        ProfileCard(
+          title: controllerAuth.userEmail(),
           picUrl:
               'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg',
           date: "21/11/2021",

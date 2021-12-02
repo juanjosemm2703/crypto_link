@@ -1,12 +1,39 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/post_controller.dart';
 import 'package:crypto_link/ui/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:network_image_mock/network_image_mock.dart';
+import 'package:mockito/mockito.dart';
 
 Widget makeTestableWidget() => MaterialApp(home: Image.network(''));
 
+class MockAuthController extends GetxService
+    with Mock
+    implements AuthController {
+  @override
+  Future<void> signUp(dynamic _email, dynamic _passw, dynamic username) async {}
+
+  @override
+  Future<void> logOut() async {}
+
+  @override
+  String userEmail() {
+    String email = "a@a.com";
+    return email;
+  }
+}
+
 void main() {
+  setUp(() {
+    MockAuthController mockAuthController = MockAuthController();
+    Get.put<AuthController>(mockAuthController);
+  });
+
   testWidgets('Signup', (WidgetTester tester) async {
+    Get.put(PostController());
     // Working with Network Images.
     await mockNetworkImagesFor(() => tester.pumpWidget(makeTestableWidget()));
     // Build our app and trigger a frame.

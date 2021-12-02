@@ -1,4 +1,7 @@
+import 'package:crypto_link/domain/controller/post_controller.dart';
+import 'package:crypto_link/ui/pages/content/content_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'widgets/state_card.dart';
 
 class StatesScreen extends StatefulWidget {
@@ -10,20 +13,25 @@ class StatesScreen extends StatefulWidget {
 
 class _State extends State<StatesScreen> {
   final items = List<String>.generate(20, (i) => "Item $i");
-
+  PostController controllerPost = Get.find();
   @override
   Widget build(BuildContext context) {
+    final posts = controllerPost.posts;
     return ListView.builder(
-      itemCount: items.length,
+      itemCount: posts.length,
       itemBuilder: (context, index) {
         return StateCard(
-            title: 'Diana L. Vera O',
-            content:
-                'A powerful social network to share, track and know the best knowledges about blockchain and crypto currency.',
-            picUrl:
-                'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg',
-            onChat: () => {},
-            date: "21/11/2021");
+            title: posts[index].name,
+            content: posts[index].content,
+            picUrl: posts[index].picUrl,
+            onDelete: () {
+              controllerPost.deletePost(index);
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ContentPage()),
+                  (route) => false);
+            },
+            date: posts[index].date);
       },
     );
   }

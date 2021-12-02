@@ -1,12 +1,39 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/post_controller.dart';
 import 'package:crypto_link/ui/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:mockito/mockito.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
 Widget makeTestableWidget() => MaterialApp(home: Image.network(''));
 
+class MockAuthController extends GetxService
+    with Mock
+    implements AuthController {
+  @override
+  Future<void> logIn(dynamic email, dynamic pass) async {}
+
+  @override
+  Future<void> logOut() async {}
+
+  @override
+  String userEmail() {
+    String email = "a@a.com";
+    return email;
+  }
+}
+
 void main() {
-  testWidgets('Login', (WidgetTester tester) async {
+  setUp(() {
+    MockAuthController mockAuthController = MockAuthController();
+    Get.put<AuthController>(mockAuthController);
+  });
+
+  testWidgets('Login test', (WidgetTester tester) async {
+    Get.put(PostController());
     // Working with Network Images.
     await mockNetworkImagesFor(() => tester.pumpWidget(makeTestableWidget()));
     // Build our app and trigger a frame.
@@ -25,8 +52,9 @@ void main() {
     await tester.pumpAndSettle();
 
     // Enter data to Text Fields.
-    await tester.enterText(find.byKey(const Key('email')), 'juan@gmail.com');
-    await tester.enterText(find.byKey(const Key('password')), 'password123');
+    await tester.enterText(
+        find.byKey(const Key('email')), 'juanmartinezmonsalve@gmail.com');
+    await tester.enterText(find.byKey(const Key('password')), '123456');
 
     // Go to Content page.
     await tester.ensureVisible(find.byKey(const Key('logInButton')));

@@ -11,9 +11,12 @@ class NewPost extends StatefulWidget {
 class _State extends State<NewPost> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-        child: NewPostCard(
-            picUrl:
-                'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg'));
+    return const Padding(
+      padding: EdgeInsets.only(top: 15.0),
+      child: Center(
+          child: NewPostCard(
+              picUrl:
+                  'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg')),
+    );
   }
 }

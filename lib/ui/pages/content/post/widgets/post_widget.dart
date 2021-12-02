@@ -1,4 +1,8 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/post_controller.dart';
+import 'package:crypto_link/ui/pages/content/content_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NewPostCard extends StatelessWidget {
   final String picUrl;
@@ -7,6 +11,8 @@ class NewPostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PostController controllerPost = Get.find();
+    AuthController controllerAuth = Get.find();
     final post = TextEditingController();
     return Column(
       children: [
@@ -45,7 +51,15 @@ class NewPostCard extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(60),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  controllerPost.newPost(controllerAuth.userEmail(), post.text,
+                      picUrl, DateTime.now().toString());
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ContentPage()),
+                      (route) => false);
+                },
                 child: Text('Add Post',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline1),

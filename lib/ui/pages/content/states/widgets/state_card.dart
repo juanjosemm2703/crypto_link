@@ -1,10 +1,12 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/ui/widgets/card.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class StateCard extends StatelessWidget {
   final String title, content, date;
   final String picUrl;
-  final VoidCallback onChat;
+  final VoidCallback onDelete;
 
   // StateCard constructor
   const StateCard(
@@ -12,15 +14,31 @@ class StateCard extends StatelessWidget {
       required this.title,
       required this.content,
       required this.picUrl,
-      required this.onChat,
+      required this.onDelete,
       required this.date})
       : super(key: key);
+
+  Widget getIconButton(primaryColor) {
+    AuthController controllerAuth = Get.find();
+    if (controllerAuth.userEmail() == title) {
+      return IconButton(
+        icon: Icon(
+          Icons.delete,
+          color: primaryColor,
+        ),
+        onPressed: onDelete,
+      );
+    } else {
+      return Container();
+    }
+  }
 
   // We create a Stateless widget that contais an AppCard,
   // Passing all the customizable views as parameters
   @override
   Widget build(BuildContext context) {
     Color primaryColor = Theme.of(context).colorScheme.primary;
+
     return AppCard(
       title: title,
       content: Text(
@@ -40,13 +58,7 @@ class StateCard extends StatelessWidget {
         ),
       ),
       // topRightWidget widget as an IconButton
-      topRightWidget: IconButton(
-        icon: Icon(
-          Icons.chat_outlined,
-          color: primaryColor,
-        ),
-        onPressed: onChat,
-      ),
+      topRightWidget: getIconButton(primaryColor),
       extraContent: Text(
         date,
         style: Theme.of(context).textTheme.headline3,

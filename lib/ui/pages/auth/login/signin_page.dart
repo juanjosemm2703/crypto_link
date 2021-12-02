@@ -38,6 +38,22 @@ class _State extends State<SignIn> {
     return true;
   }
 
+  _inicio(theEmail, thePassword) async {
+    print('_login $theEmail $thePassword');
+    try {
+      await controllerAuth.logIn(theEmail, thePassword);
+      Get.toNamed('/content');
+    } catch (err) {
+      print(err.toString());
+      Get.snackbar(
+        "Login",
+        err.toString(),
+        icon: const Icon(Icons.person, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -114,9 +130,7 @@ class _State extends State<SignIn> {
                     final form = _formKey.currentState;
                     form!.save();
                     if (form.validate()) {
-                      controllerAuth.logIn();
-                      Get.offNamed('/content');
-                      print(controllerAuth.authController);
+                      _inicio(_emailController.text, _passwordController.text);
                     } else {
                       Get.snackbar(
                         "Error",

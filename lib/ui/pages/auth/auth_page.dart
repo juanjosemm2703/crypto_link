@@ -47,19 +47,11 @@ class _State extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AuthController());
-    return Stack(fit: StackFit.expand, children: <Widget>[
-      CustomPaint(
-          painter: BackgroundPainter(
-              fondo: Theme.of(context).colorScheme.background,
-              blur: Theme.of(context).colorScheme.primary)),
-      Scaffold(
-        backgroundColor: Colors.transparent,
+    return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Center(
           child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 500), child: _content),
-        ),
-      )
-    ]);
+        ));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/ui/widgets/widget_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _State extends State<SignUp> {
+  AuthController controllerAuth = Get.find();
   final fullName = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -34,6 +36,22 @@ class _State extends State<SignUp> {
       return false;
     }
     return true;
+  }
+
+  _signUp(theEmail, thePassword, username) async {
+    print('_login $theEmail $thePassword $username');
+    try {
+      await controllerAuth.signUp(theEmail, thePassword, username);
+      Get.toNamed('/content');
+    } catch (err) {
+      print(err.toString());
+      Get.snackbar(
+        "Login",
+        err.toString(),
+        icon: const Icon(Icons.person, color: Colors.red),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
   }
 
   @override
@@ -122,7 +140,8 @@ class _State extends State<SignUp> {
                       final form = _formKey.currentState;
                       form!.save();
                       if (form.validate()) {
-                        Get.offNamed('/content');
+                        _signUp(emailController.text, passwordController.text,
+                            fullName.text);
                       } else {
                         Get.snackbar(
                           "Error",
