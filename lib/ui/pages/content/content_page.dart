@@ -1,4 +1,5 @@
 import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/online/onlinechat_screen.dart';
 import 'package:crypto_link/ui/pages/content/post/new_post.dart';
 import 'package:crypto_link/ui/pages/content/profile/profile_page.dart';
@@ -89,12 +90,13 @@ class _State extends State<ContentPage> {
   @override
   Widget build(BuildContext context) {
     AuthController controllerAuth = Get.find();
+    UserController controllerUser = Get.find();
+    print(controllerUser.data[0].name);
     return Scaffold(
         key: const Key('contentPage'),
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: CustomAppBar(
-            picUrl:
-                'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg',
+            picUrl: controllerUser.data[0].profilePic,
             titulo: Text("Crypto Link",
                 style: Theme.of(context).textTheme.headline1),
             context: context,

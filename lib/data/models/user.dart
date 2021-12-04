@@ -1,20 +1,28 @@
-import 'package:crypto_link/data/models/chat_messages.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  int id;
-  String name;
-  String profilePic;
-  List<ChatMessage> chatMessages = [];
+  final String email;
+  final String profilePic;
+  final String name;
 
   User({
-    required this.id,
+    this.reference,
+    required this.email,
     required this.name,
-    this.profilePic =
-        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+    required this.profilePic,
   });
 
-  void addNewMessage(text, isSender) {
-    ChatMessage newMessage = ChatMessage(text: text, isSender: isSender);
-    chatMessages.add(newMessage);
-  }
+  final DocumentReference? reference;
+
+  User.fromMap(Map<String, dynamic> map, {required this.reference})
+      : assert(map['name'] != null),
+        assert(map['email'] != null),
+        assert(map['profilePic'] != null),
+        name = map['name'],
+        email = map['email'],
+        profilePic = map['profilePic'];
+
+  User.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data() as Map<String, dynamic>,
+            reference: snapshot.reference);
 }

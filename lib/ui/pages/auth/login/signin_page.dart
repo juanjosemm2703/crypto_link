@@ -1,4 +1,5 @@
 import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/widgets/widget_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,6 +17,7 @@ class SignIn extends StatefulWidget {
 
 class _State extends State<SignIn> {
   AuthController controllerAuth = Get.find();
+  UserController controllerUser = Get.find();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   // Que hace la variable GlobalKey
@@ -42,6 +44,7 @@ class _State extends State<SignIn> {
     print('_login $theEmail $thePassword');
     try {
       await controllerAuth.logIn(theEmail, thePassword);
+      await controllerUser.updateUserData(controllerAuth.getUid());
       Get.toNamed('/content');
     } catch (err) {
       print(err.toString());

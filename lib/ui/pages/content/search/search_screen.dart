@@ -33,7 +33,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 20,
+                    itemCount: 10,
                     itemBuilder: (context, index) {
                       return SearchCard(
                           date: datos[index].publishedAt,

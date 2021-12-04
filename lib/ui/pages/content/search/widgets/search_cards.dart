@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class SearchCard extends StatelessWidget {
@@ -37,10 +38,22 @@ class SearchCard extends StatelessWidget {
                   ),
                 ),
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Image.network(picUrl,
-                      height: 80, width: 80, fit: BoxFit.cover),
-                ),
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      height: 80,
+                      width: 80,
+                      imageUrl: picUrl,
+                      placeholder: (context, url) => const SizedBox(
+                        child: CircularProgressIndicator(),
+                        width: 10,
+                        height: 10,
+                      ),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
+                    )),
               ],
             ),
             const SizedBox(

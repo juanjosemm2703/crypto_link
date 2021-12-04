@@ -1,4 +1,4 @@
-import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/profile/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +15,8 @@ class _State extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AuthController controllerAuth = Get.find();
+    UserController controllerUser = Get.find();
+
     return ListView(
       children: <Widget>[
         Padding(
@@ -23,17 +24,17 @@ class _State extends State<ProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Center(
+              Center(
                 child: CircleAvatar(
                   minRadius: 50.0,
                   maxRadius: 50.0,
-                  backgroundImage: NetworkImage(
-                      'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg'),
+                  backgroundImage:
+                      NetworkImage(controllerUser.data[0].profilePic),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10.0, bottom: 15),
-                child: Text(controllerAuth.userEmail(),
+                child: Text(controllerUser.data[0].name,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headline1),
               ),
@@ -57,9 +58,8 @@ class _State extends State<ProfileScreen> {
           ),
         ),
         ProfileCard(
-          title: controllerAuth.userEmail(),
-          picUrl:
-              'https://dq1eylutsoz4u.cloudfront.net/2016/08/24175451/how-to-get-a-good-profile-photo.jpg',
+          title: controllerUser.data[0].name,
+          picUrl: controllerUser.data[0].profilePic,
           date: "21/11/2021",
           content: 'Me gustaria hablar hoy sobre criptomonedas',
         )

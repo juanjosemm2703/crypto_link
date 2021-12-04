@@ -1,4 +1,6 @@
+import 'package:crypto_link/data/models/user.dart';
 import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/widgets/widget_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +17,7 @@ class SignUp extends StatefulWidget {
 
 class _State extends State<SignUp> {
   AuthController controllerAuth = Get.find();
+  UserController controllerUser = Get.find();
   final fullName = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -43,6 +46,17 @@ class _State extends State<SignUp> {
     try {
       await controllerAuth.signUp(theEmail, thePassword, username);
       Get.toNamed('/content');
+      await controllerUser.addUserData(
+          username,
+          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          theEmail,
+          controllerAuth.getUid());
+      final _user = User(
+          email: theEmail,
+          name: username,
+          profilePic:
+              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
+      await controllerUser.updateUserDataBySignUp(_user);
     } catch (err) {
       print(err.toString());
       Get.snackbar(
