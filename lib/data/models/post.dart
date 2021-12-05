@@ -1,17 +1,22 @@
 class Post {
-  final String name, content, picUrl, date;
+  final String name, message, picUrl, date;
 
   Post(
       {required this.name,
-      required this.content,
+      required this.message,
       required this.picUrl,
       required this.date});
 
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-        name: json['name'],
-        content: json['content'],
-        picUrl: json['picUrl'],
-        date: json['date']);
-  }
+  static Post fromJson(Map<String, dynamic> json) => Post(
+      name: json['name'],
+      message: json['message'],
+      picUrl: json['picUrl'],
+      date: json['date']);
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'message': message,
+        'picUrl': picUrl,
+        'date': date,
+      };
 }

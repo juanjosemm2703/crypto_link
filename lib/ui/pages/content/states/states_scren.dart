@@ -1,8 +1,10 @@
-import 'package:crypto_link/domain/controller/post_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/ui/pages/content/content_page.dart';
+import 'package:crypto_link/ui/pages/content/states/widgets/state_card.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'widgets/state_card.dart';
 
 class StatesScreen extends StatefulWidget {
   const StatesScreen({Key? key}) : super(key: key);
@@ -12,27 +14,44 @@ class StatesScreen extends StatefulWidget {
 }
 
 class _State extends State<StatesScreen> {
-  final items = List<String>.generate(20, (i) => "Item $i");
-  PostController controllerPost = Get.find();
+  AuthController authController = Get.find();
+
   @override
   Widget build(BuildContext context) {
-    final posts = controllerPost.posts;
-    return ListView.builder(
-      itemCount: posts.length,
-      itemBuilder: (context, index) {
-        return StateCard(
-            title: posts[index].name,
-            content: posts[index].content,
-            picUrl: posts[index].picUrl,
-            onDelete: () {
-              controllerPost.deletePost(index);
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ContentPage()),
-                  (route) => false);
-            },
-            date: posts[index].date);
-      },
-    );
+    final uid = authController.getUid();
+    final Stream<QuerySnapshot> _postsStream = FirebaseFirestore.instance
+        .collection('post/$uid/messages')
+        .orderBy('date', descending: true)
+        .snapshots();
+
+    return StreamBuilder<QuerySnapshot>(
+        stream: _postsStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data()! as Map<String, dynamic>;
+              return StateCard(
+                  title: (data['name']),
+                  content: (data['message']),
+                  picUrl: (data['picUrl']),
+                  onDelete: () {
+                    // controllerPost.deletePost(index);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ContentPage()),
+                        (route) => false);
+                  },
+                  date: (data['date']));
+            }).toList(),
+          );
+        });
   }
 }

@@ -42,7 +42,8 @@ dependencies:
   firebase_database: 
   cloud_firestore:
   cached_network_image:
-    
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

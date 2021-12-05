@@ -1,5 +1,8 @@
+import 'package:crypto_link/data/models/post.dart';
 import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/domain/controller/post_controller.dart';
+
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/content_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +15,7 @@ class NewPostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PostController controllerPost = Get.find();
+    UserController controllerUser = Get.find();
     AuthController controllerAuth = Get.find();
     final post = TextEditingController();
     return Column(
@@ -52,8 +56,12 @@ class NewPostCard extends StatelessWidget {
                   minimumSize: const Size.fromHeight(60),
                 ),
                 onPressed: () {
-                  controllerPost.newPost(controllerAuth.userEmail(), post.text,
-                      picUrl, DateTime.now().toString());
+                  Post newPost = Post(
+                      name: controllerUser.data[0].name,
+                      message: post.text,
+                      picUrl: controllerUser.data[0].profilePic,
+                      date: DateTime.now().toString());
+                  controllerPost.uploadPost(controllerAuth.getUid(), newPost);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
