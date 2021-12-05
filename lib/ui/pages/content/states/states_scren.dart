@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_link/domain/controller/auth_controller.dart';
-import 'package:crypto_link/ui/pages/content/content_page.dart';
+import 'package:crypto_link/domain/controller/post_controller.dart';
 import 'package:crypto_link/ui/pages/content/states/widgets/state_card.dart';
 
 import 'package:flutter/material.dart';
@@ -14,13 +14,13 @@ class StatesScreen extends StatefulWidget {
 }
 
 class _State extends State<StatesScreen> {
-  AuthController authController = Get.find();
-
+  AuthController controllerAuth = Get.find();
+  PostController controllerPost = Get.find();
   @override
   Widget build(BuildContext context) {
-    final uid = authController.getUid();
+    final uid = controllerAuth.getUid();
     final Stream<QuerySnapshot> _postsStream = FirebaseFirestore.instance
-        .collection('post/$uid/messages')
+        .collection('post/')
         .orderBy('date', descending: true)
         .snapshots();
 
@@ -42,12 +42,7 @@ class _State extends State<StatesScreen> {
                   content: (data['message']),
                   picUrl: (data['picUrl']),
                   onDelete: () {
-                    // controllerPost.deletePost(index);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ContentPage()),
-                        (route) => false);
+                    controllerPost.deletePost(document.id);
                   },
                   date: (data['date']));
             }).toList(),

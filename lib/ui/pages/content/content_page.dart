@@ -91,7 +91,7 @@ class _State extends State<ContentPage> {
   Widget build(BuildContext context) {
     AuthController controllerAuth = Get.find();
     UserController controllerUser = Get.find();
-    print(controllerUser.data[0].name);
+
     return Scaffold(
         key: const Key('contentPage'),
         backgroundColor: Theme.of(context).colorScheme.background,

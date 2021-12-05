@@ -1,4 +1,4 @@
-import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/widgets/card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,8 +19,8 @@ class StateCard extends StatelessWidget {
       : super(key: key);
 
   Widget getIconButton(primaryColor) {
-    AuthController controllerAuth = Get.find();
-    if (controllerAuth.userEmail() == title) {
+    UserController controllerUser = Get.find();
+    if (controllerUser.data[0].name == title) {
       return IconButton(
         icon: Icon(
           Icons.delete,

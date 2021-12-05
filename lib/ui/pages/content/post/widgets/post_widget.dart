@@ -57,6 +57,7 @@ class NewPostCard extends StatelessWidget {
                 ),
                 onPressed: () {
                   Post newPost = Post(
+                      uid: controllerAuth.getUid(),
                       name: controllerUser.data[0].name,
                       message: post.text,
                       picUrl: controllerUser.data[0].profilePic,

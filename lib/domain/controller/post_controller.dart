@@ -9,11 +9,19 @@ class PostController extends GetxController {
   }
 
   Future uploadPost(String uid, Post newPost) async {
-    final _refPosts =
-        FirebaseFirestore.instance.collection('post/$uid/messages');
+    final _refPosts = FirebaseFirestore.instance.collection('post/');
     await _refPosts.add(newPost.toJson());
 
     final _refUser = FirebaseFirestore.instance.collection('user');
-    await _refUser.doc(uid).update({'lastMessagetTime': DateTime.now()});
+    await _refUser.doc(uid).update({'lastMessageTime': DateTime.now()});
+  }
+
+  Future deletePost(String idPost) async {
+    await FirebaseFirestore.instance
+        .collection('post/')
+        .doc(idPost)
+        .delete()
+        .then((value) => print("User Deleted"))
+        .catchError((error) => print("Failed to delete user: $error"));
   }
 }
