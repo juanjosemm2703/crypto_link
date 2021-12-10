@@ -1,4 +1,3 @@
-import 'package:crypto_link/data/models/chat_messages.dart';
 import 'package:flutter/material.dart';
 
 class OneMessage extends StatelessWidget {

@@ -21,6 +21,13 @@ class ChatController extends GetxController {
     createChatRoom(chatRoomId, chatRoomMap);
   }
 
+  getChatRooms(String userName) {
+    return FirebaseFirestore.instance
+        .collection("ChatRoom")
+        .where("users", arrayContains: userName)
+        .snapshots();
+  }
+
   getChatRoomId(String a, String b) {
     int valor1 = 0;
     int valor2 = 0;
@@ -45,10 +52,6 @@ class ChatController extends GetxController {
         .catchError((e) {
       print(e.toString());
     });
-  }
-
-  getConversationMessage(String chatRoomId) {
-    chatCollection.doc(chatRoomId).collection("chats").snapshots();
   }
 
   sendMessage(String chatRoomId, message, username, date) async {
