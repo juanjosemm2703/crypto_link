@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto_link/data/models/chat.dart';
 import 'package:crypto_link/domain/controller/chat_controller.dart';
 import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/chat/widgets/chat_cards.dart';
@@ -39,11 +38,13 @@ class _State extends State<ChatScreen> {
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
-              print(data['users'][1]);
+              String secondUser = data['chatroomid']
+                  .replaceAll("_", "")
+                  .replaceAll(controllerUser.user[0].name, "");
               return StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('user')
-                      .where('name', isEqualTo: data['users'][1])
+                      .where('name', isEqualTo: secondUser)
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
