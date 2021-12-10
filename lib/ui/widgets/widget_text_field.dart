@@ -23,6 +23,7 @@ class WidgetTextField extends StatelessWidget {
         padding: EdgeInsets.only(
             top: MediaQuery.of(context).size.width * paddingHeight),
         child: TextFormField(
+            style: TextStyle(color: Colors.grey),
             obscureText: true,
             obscuringCharacter: "*",
             validator: (value) {
@@ -45,6 +46,7 @@ class WidgetTextField extends StatelessWidget {
         padding: EdgeInsets.only(
             top: MediaQuery.of(context).size.width * paddingHeight),
         child: TextFormField(
+            style: TextStyle(color: Colors.grey),
             validator: (value) {
               return validator(value);
             },

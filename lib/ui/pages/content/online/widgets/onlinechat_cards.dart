@@ -49,26 +49,31 @@ class OnlineCard extends StatelessWidget {
                           textAlign: TextAlign.left,
                           style: Theme.of(context).textTheme.headline1,
                         ),
-                        if (isActive)
-                          Row(
-                            children: [
-                              Container(
-                                height: 12,
-                                width: 12,
-                                decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor)),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text("Online",
-                                  style: Theme.of(context).textTheme.headline3),
-                            ],
-                          ),
+                        // if (isActive)
+                        Row(
+                          children: [
+                            Container(
+                              height: 12,
+                              width: 12,
+                              decoration: BoxDecoration(
+                                  color: isActive ? Colors.green : Colors.grey,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor)),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            isActive
+                                ? Text("Online",
+                                    style:
+                                        Theme.of(context).textTheme.headline3)
+                                : Text("Offline",
+                                    style:
+                                        Theme.of(context).textTheme.headline3),
+                          ],
+                        ),
                       ],
                     ),
                   ),

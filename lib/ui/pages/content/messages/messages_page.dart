@@ -4,7 +4,7 @@ import 'package:crypto_link/ui/widgets/background.dart';
 import 'package:flutter/material.dart';
 
 class Messages extends StatelessWidget {
-  String picUrl, name;
+  String picUrl, name, chatRoomId;
   bool isActivate;
 
   Messages({
@@ -12,6 +12,7 @@ class Messages extends StatelessWidget {
     required this.picUrl,
     required this.name,
     required this.isActivate,
+    required this.chatRoomId,
   }) : super(key: key);
 
   @override
@@ -34,6 +35,7 @@ class Messages extends StatelessWidget {
             ),
             body: BodyMessages(
               picUrl: picUrl,
+              chatRoomId: chatRoomId,
             ),
           ),
         ]);

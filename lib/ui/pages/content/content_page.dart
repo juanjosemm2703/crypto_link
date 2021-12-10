@@ -113,10 +113,10 @@ class _State extends State<ContentPage> {
                 style: Theme.of(context).textTheme.headline1),
             context: context,
             onSignOff: () async {
-              controller.clearUserData();
-              await controllerAuth.logOut();
               await controller.changeUserState(false, controllerAuth.getUid());
-              Get.offNamed('/auth');
+              await controllerAuth.logOut();
+              await Get.offNamed('/auth');
+              controller.clearUserData();
             },
             onProfile: () {
               _onFlottingTapped(3);

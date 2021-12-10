@@ -39,6 +39,7 @@ class MyTheme {
         color: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
+
       textTheme: AppTextStyle.textTheme.copyWith(
         bodyText1: AppTextStyle.bodytext1.copyWith(
           color: Colors.white70,

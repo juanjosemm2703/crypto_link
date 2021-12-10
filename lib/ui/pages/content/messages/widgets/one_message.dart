@@ -2,9 +2,14 @@ import 'package:crypto_link/data/models/chat_messages.dart';
 import 'package:flutter/material.dart';
 
 class OneMessage extends StatelessWidget {
-  final ChatMessage message;
+  final String message;
+  final bool isSender;
   final String picUrl;
-  const OneMessage({Key? key, required this.message, required this.picUrl})
+  const OneMessage(
+      {Key? key,
+      required this.message,
+      required this.picUrl,
+      required this.isSender})
       : super(key: key);
 
   @override
@@ -13,9 +18,9 @@ class OneMessage extends StatelessWidget {
       padding: const EdgeInsets.only(top: 15.0),
       child: Row(
         mainAxisAlignment:
-            message.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+            isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          if (!message.isSender) ...[
+          if (!isSender) ...[
             CircleAvatar(
               radius: 12,
               backgroundImage: NetworkImage(picUrl),
@@ -27,12 +32,12 @@ class OneMessage extends StatelessWidget {
           Container(
               padding: const EdgeInsets.symmetric(
                   horizontal: 15 * 0.75, vertical: 15 / 2),
-              child: Text(message.text),
+              child: Text(message),
               decoration: BoxDecoration(
                   color: Theme.of(context)
                       .colorScheme
                       .primary
-                      .withOpacity(message.isSender ? 1 : 0.15),
+                      .withOpacity(isSender ? 1 : 0.15),
                   borderRadius: BorderRadius.circular(30))),
         ],
       ),

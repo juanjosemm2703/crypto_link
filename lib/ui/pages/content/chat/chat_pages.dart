@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_link/data/models/chat.dart';
+import 'package:crypto_link/domain/controller/chat_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/chat/widgets/chat_cards.dart';
 import 'package:crypto_link/ui/pages/content/messages/messages_page.dart';
 
@@ -13,27 +16,46 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _State extends State<ChatScreen> {
+  ChatController controllerChat = Get.find();
+  UserController controllerUser = Get.find();
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: chatsData.length,
-      itemBuilder: (context, index) {
-        return ChatCard(
-            press: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Messages(
-                            isActivate: chatsData[index].isActive,
-                            name: chatsData[index].name,
-                            picUrl: chatsData[index].image,
-                          )));
-            },
-            title: chatsData[index].name,
-            picUrl: chatsData[index].image,
-            content: chatsData[index].lastMessage,
-            isActive: chatsData[index].isActive);
-      },
-    );
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('user/')
+            .orderBy('isActive', descending: true)
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          return ListView(
+            children: snapshot.data!.docs.map((DocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data()! as Map<String, dynamic>;
+              return ChatCard(
+                title: data['name'],
+                press: () async {
+                  await controllerChat.createChatRoomAndStartConversation(
+                      controllerUser.user[0].name, data['name']);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Messages(
+                                chatRoomId: controllerChat.getChatRoomId(
+                                    controllerUser.user[0].name, data['name']),
+                                isActivate: data['isActive'],
+                                name: data['name'],
+                                picUrl: data['profilePic'],
+                              )));
+                },
+                picUrl: data['profilePic'],
+                isActive: data['isActive'],
+                content: '',
+              );
+            }).toList(),
+          );
+        });
   }
 }

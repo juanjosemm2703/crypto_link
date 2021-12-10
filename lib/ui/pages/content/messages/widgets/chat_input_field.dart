@@ -1,11 +1,23 @@
-import 'package:crypto_link/ui/theme/colors.dart';
+import 'package:crypto_link/domain/controller/chat_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class ChatInputField extends StatelessWidget {
+class ChatInputField extends StatefulWidget {
+  final String chatRoomId;
   const ChatInputField({
     Key? key,
+    required this.chatRoomId,
   }) : super(key: key);
 
+  @override
+  State<ChatInputField> createState() => _ChatInputFieldState();
+}
+
+class _ChatInputFieldState extends State<ChatInputField> {
+  final _messageController = TextEditingController();
+  ChatController controllerChat = Get.find();
+  UserController controllerUser = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,13 +46,21 @@ class ChatInputField extends StatelessWidget {
               const SizedBox(
                 width: 15,
               ),
-              const Expanded(
+              Expanded(
                   child: TextField(
-                decoration: InputDecoration(
+                controller: _messageController,
+                decoration: const InputDecoration(
                     hintText: 'Type Message', border: InputBorder.none),
               )),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await controllerChat.sendMessage(
+                        widget.chatRoomId,
+                        _messageController.text,
+                        controllerUser.user[0].name,
+                        DateTime.now().toString());
+                    _messageController.clear();
+                  },
                   icon: const Icon(Icons.send),
                   color:
                       Theme.of(context).colorScheme.primary.withOpacity(0.6)),

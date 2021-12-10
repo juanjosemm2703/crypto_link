@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/chat_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/messages/messages_page.dart';
 import 'package:crypto_link/ui/pages/content/online/widgets/onlinechat_cards.dart';
-import 'package:crypto_link/data/models/online_people.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class OnlinePeopleScreen extends StatefulWidget {
   const OnlinePeopleScreen({Key? key}) : super(key: key);
@@ -13,12 +16,14 @@ class OnlinePeopleScreen extends StatefulWidget {
 }
 
 class _State extends State<OnlinePeopleScreen> {
+  ChatController controllerChat = Get.find();
+  UserController controllerUser = Get.find();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('user/')
-            .where('isActive', isEqualTo: true)
+            .orderBy('isActive', descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) return Text('Error = ${snapshot.error}');
@@ -29,20 +34,27 @@ class _State extends State<OnlinePeopleScreen> {
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
-              return OnlineCard(
-                  title: data['name'],
-                  press: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Messages(
-                                  isActivate: data['isActive'],
-                                  name: data['name'],
-                                  picUrl: data['profilePic'],
-                                )));
-                  },
-                  picUrl: data['profilePic'],
-                  isActive: data['isActive']);
+              return data['name'] != controllerUser.data[0].name
+                  ? OnlineCard(
+                      title: data['name'],
+                      press: () async {
+                        await controllerChat.createChatRoomAndStartConversation(
+                            controllerUser.user[0].name, data['name']);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Messages(
+                                      chatRoomId: controllerChat.getChatRoomId(
+                                          controllerUser.user[0].name,
+                                          data['name']),
+                                      isActivate: data['isActive'],
+                                      name: data['name'],
+                                      picUrl: data['profilePic'],
+                                    )));
+                      },
+                      picUrl: data['profilePic'],
+                      isActive: data['isActive'])
+                  : const SizedBox.shrink();
             }).toList(),
           );
         });
