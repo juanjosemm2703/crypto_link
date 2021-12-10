@@ -45,6 +45,7 @@ class _State extends State<SignIn> {
     try {
       await controllerAuth.logIn(theEmail, thePassword);
       await controllerUser.updateUserData(controllerAuth.getUid());
+      await controllerUser.changeUserState(true, controllerAuth.getUid());
       Get.toNamed('/content');
     } catch (err) {
       print(err.toString());

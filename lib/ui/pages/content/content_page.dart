@@ -112,9 +112,10 @@ class _State extends State<ContentPage> {
             titulo: Text("Crypto Link",
                 style: Theme.of(context).textTheme.headline1),
             context: context,
-            onSignOff: () {
+            onSignOff: () async {
               controller.clearUserData();
-              controllerAuth.logOut();
+              await controllerAuth.logOut();
+              await controller.changeUserState(false, controllerAuth.getUid());
               Get.offNamed('/auth');
             },
             onProfile: () {

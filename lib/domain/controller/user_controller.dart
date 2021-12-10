@@ -22,6 +22,13 @@ class UserController extends GetxController {
     });
   }
 
+  changeUserState(bool isActive, String uid) async {
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(uid)
+        .update({'isActive': isActive});
+  }
+
   updateUserData(String uid) async {
     user.clear();
     final DocumentReference _user =
