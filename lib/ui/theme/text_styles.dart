@@ -13,32 +13,32 @@ class AppTextStyle {
   // Headline 1
   static TextStyle get headline1 => GoogleFonts.lato(
         fontSize: 18,
-        fontWeight: FontWeight.w900,
-        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.w700,
+        fontStyle: FontStyle.normal,
       );
   // Headline 2
   static TextStyle get headline2 => GoogleFonts.lato(
         fontSize: 16.0,
         fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.italic,
+        fontStyle: FontStyle.normal,
       );
   // Headline 3
   static TextStyle get headline3 => GoogleFonts.lato(
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        fontStyle: FontStyle.italic,
+        fontStyle: FontStyle.normal,
       );
   // Bodytext 1
   static TextStyle get bodytext1 => GoogleFonts.lato(
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        fontStyle: FontStyle.italic,
+        fontStyle: FontStyle.normal,
       );
   // Caption
   static TextStyle get caption => GoogleFonts.lato(
         fontSize: 16.0,
         fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.italic,
+        fontStyle: FontStyle.normal,
       );
 
   static TextTheme get textTheme => TextTheme(

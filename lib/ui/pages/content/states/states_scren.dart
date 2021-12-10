@@ -32,21 +32,36 @@ class _State extends State<StatesScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           }
-
           return ListView(
-            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-              Map<String, dynamic> data =
-                  document.data()! as Map<String, dynamic>;
-              return StateCard(
-                  title: (data['name']),
-                  content: (data['message']),
-                  picUrl: (data['picUrl']),
-                  onDelete: () {
-                    controllerPost.deletePost(document.id);
-                  },
-                  date: (data['date']));
-            }).toList(),
-          );
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data =
+                document.data()! as Map<String, dynamic>;
+
+            return StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('user')
+                    .where('name', isEqualTo: data['name'])
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError)
+                    return Text('Error = ${snapshot.error}');
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  dynamic user =
+                      snapshot.data!.docs[0].data() as Map<String, dynamic>;
+                  return StateCard(
+                      title: (data['name']),
+                      content: (data['message']),
+                      picUrl: (user['profilePic']),
+                      onDelete: () {
+                        controllerPost.deletePost(document.id);
+                      },
+                      date: (data['date']));
+                });
+          }).toList());
         });
   }
 }

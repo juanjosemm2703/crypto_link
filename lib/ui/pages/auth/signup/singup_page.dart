@@ -42,11 +42,6 @@ class _State extends State<SignUp> {
   }
 
   _signUp(theEmail, thePassword, username) async {
-    final _user = User(
-        email: theEmail,
-        name: username,
-        profilePic:
-            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png');
     print('_login $theEmail $thePassword $username');
     try {
       await controllerAuth.signUp(theEmail, thePassword, username);
@@ -56,7 +51,12 @@ class _State extends State<SignUp> {
           'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
           theEmail,
           controllerAuth.getUid());
-
+      final _user = User(
+          email: theEmail,
+          name: username,
+          profilePic:
+              'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
+          uid: controllerAuth.getUid());
       await controllerUser.updateUserDataBySignUp(_user);
     } catch (err) {
       print(err.toString());

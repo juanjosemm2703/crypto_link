@@ -5,7 +5,7 @@ class CustomAppBar extends AppBar {
   final BuildContext context;
   final String picUrl;
   final Widget titulo;
-  final VoidCallback onSignOff, onProfile;
+  final VoidCallback onSignOff, onProfile, setTheme;
 
   // Creating a custom AppBar that extends from Appbar with super();
   CustomAppBar(
@@ -14,7 +14,8 @@ class CustomAppBar extends AppBar {
       required this.picUrl,
       required this.titulo,
       required this.onSignOff,
-      required this.onProfile})
+      required this.onProfile,
+      required this.setTheme})
       : super(
           key: key,
           centerTitle: true,
@@ -34,10 +35,11 @@ class CustomAppBar extends AppBar {
               icon: const Icon(
                 Icons.brightness_4_rounded,
               ),
-              onPressed: () {
-                Get.changeThemeMode(
-                    Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-              },
+              onPressed: setTheme,
+              // () {
+              //   Get.changeThemeMode(
+              //       Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+              // },
             ),
             IconButton(
               icon: const Icon(

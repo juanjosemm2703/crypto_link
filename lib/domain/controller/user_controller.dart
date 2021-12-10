@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_link/data/models/user.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 
 class UserController extends GetxController {
   var user = <User>[].obs;
@@ -14,6 +18,7 @@ class UserController extends GetxController {
       'name': name,
       'profilePic': profilePic,
       'email': email,
+      'uid': uid,
     });
   }
 
@@ -29,6 +34,39 @@ class UserController extends GetxController {
     user.clear();
     user.add(_user);
     print(user.length);
+  }
+
+  updateProfilePic(uid, {required File file}) async {
+    String url = await uploadImage(uid, file);
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(uid)
+        .update({'profilePic': url});
+    updateImage(url);
+    // await updateUserData(uid);
+  }
+
+  updateImage(String url) {
+    User _user = User(
+        email: user[0].email,
+        name: user[0].name,
+        uid: user[0].uid,
+        profilePic: url);
+    user.clear();
+    user.add(_user);
+  }
+
+  Future<String> uploadImage(String uid, file) async {
+    TaskSnapshot taskSnapshot = await FirebaseStorage.instance
+        .ref()
+        .child("profile_pics")
+        .child(uid + "_" + basename(file!.path))
+        .putFile(file!);
+    return taskSnapshot.ref.getDownloadURL();
+  }
+
+  clearUserData() {
+    user.clear();
   }
 
   List<User> get data => user;

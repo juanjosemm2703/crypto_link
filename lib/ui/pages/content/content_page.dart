@@ -8,7 +8,7 @@ import 'package:crypto_link/ui/pages/content/states/states_scren.dart';
 import 'package:crypto_link/ui/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'chat/chat_pages.dart';
 import 'notifications/notifications_page.dart';
 
@@ -87,65 +87,81 @@ class _State extends State<ContentPage> {
     });
   }
 
+  Future<void> setTheme() async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    Get.changeThemeMode(Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+    if (Get.isDarkMode) {
+      preferences.setBool('isLight', true);
+    } else {
+      preferences.setBool('isLight', false);
+    }
+    print(preferences.get('isLight'));
+  }
+
   @override
   Widget build(BuildContext context) {
     AuthController controllerAuth = Get.find();
-    UserController controllerUser = Get.find();
+    // UserController controllerUser = Get.find();
 
-    return Scaffold(
-        key: const Key('contentPage'),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: CustomAppBar(
-            picUrl: controllerUser.data[0].profilePic,
+    return GetX<UserController>(builder: (controller) {
+      return Scaffold(
+          key: const Key('contentPage'),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          appBar: CustomAppBar(
+            picUrl: controller.data[0].profilePic,
             titulo: Text("Crypto Link",
                 style: Theme.of(context).textTheme.headline1),
             context: context,
             onSignOff: () {
+              controller.clearUserData();
               controllerAuth.logOut();
               Get.offNamed('/auth');
             },
             onProfile: () {
               _onFlottingTapped(3);
-            }),
-        body: SafeArea(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            child: _content,
+            },
+            setTheme: setTheme,
           ),
-        ),
+          body: SafeArea(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: _content,
+            ),
+          ),
 
-        // Content screen navbar
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_filled),
-              label: 'States',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_outline),
-              label: 'Chat',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_none_outlined),
-              label: 'Notifications',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-        ),
-        floatingActionButton: FloatingActionButton(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            child: _floattingIcon,
+          // Content screen navbar
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.shifting,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_filled),
+                label: 'States',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.chat_bubble_outline),
+                label: 'Chat',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications_none_outlined),
+                label: 'Notifications',
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
           ),
-          onPressed: () {
-            _onFlottingTapped(floattingSwitch);
-          },
-        ));
+          floatingActionButton: FloatingActionButton(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: _floattingIcon,
+            ),
+            onPressed: () {
+              _onFlottingTapped(floattingSwitch);
+            },
+          ));
+    });
   }
 }
