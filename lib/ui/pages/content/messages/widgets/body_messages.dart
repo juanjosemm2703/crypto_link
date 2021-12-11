@@ -33,9 +33,11 @@ class _BodyMessagesState extends State<BodyMessages> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return Text('Error = ${snapshot.error}');
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           }
+
           if (snapshot.data!.docs.isEmpty) {
             return Column(
               children: [

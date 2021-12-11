@@ -42,7 +42,7 @@ class _State extends State<AuthPage> {
   @override
   void initState() {
     super.initState();
-    _content = WelcomeScreen(onViewSwitch: () => _onItemTapped(2));
+    _content = WelcomeScreen(onViewSwitch: () => _onItemTapped(3));
   }
 
   @override

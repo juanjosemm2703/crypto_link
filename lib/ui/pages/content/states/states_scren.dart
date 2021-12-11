@@ -18,7 +18,6 @@ class _State extends State<StatesScreen> {
   PostController controllerPost = Get.find();
   @override
   Widget build(BuildContext context) {
-    final uid = controllerAuth.getUid();
     final Stream<QuerySnapshot> _postsStream = FirebaseFirestore.instance
         .collection('post/')
         .orderBy('date', descending: true)
