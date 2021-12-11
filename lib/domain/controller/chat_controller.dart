@@ -11,14 +11,14 @@ class ChatController extends GetxController {
     });
   }
 
-  createChatRoomAndStartConversation(String username1, String username2) {
+  createChatRoomAndStartConversation(String username1, String username2) async {
     String chatRoomId = getChatRoomId(username1, username2);
     List<String> users = [username1, username2];
     Map<String, dynamic> chatRoomMap = {
       "users": users,
       "chatroomid": chatRoomId,
     };
-    createChatRoom(chatRoomId, chatRoomMap);
+    await createChatRoom(chatRoomId, chatRoomMap);
   }
 
   getChatRooms(String userName) {
@@ -26,6 +26,23 @@ class ChatController extends GetxController {
         .collection("ChatRoom")
         .where("users", arrayContains: userName)
         .snapshots();
+  }
+
+  getLastMessage(String chatroomid) {
+    return FirebaseFirestore.instance
+        .collection("ChatRoom")
+        .doc(chatroomid)
+        .collection('chats')
+        .orderBy("date", descending: false)
+        .limit(1)
+        .snapshots();
+  }
+
+  getChatRoom(String chatRoomId) async {
+    return FirebaseFirestore.instance
+        .collection("ChatRoom")
+        .doc(chatRoomId)
+        .get();
   }
 
   getChatRoomId(String a, String b) {

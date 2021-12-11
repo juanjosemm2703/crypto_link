@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/domain/controller/chat_controller.dart';
 import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/messages/messages_page.dart';
@@ -38,8 +37,6 @@ class _State extends State<OnlinePeopleScreen> {
                   ? OnlineCard(
                       title: data['name'],
                       press: () async {
-                        await controllerChat.createChatRoomAndStartConversation(
-                            controllerUser.user[0].name, data['name']);
                         Navigator.push(
                             context,
                             MaterialPageRoute(

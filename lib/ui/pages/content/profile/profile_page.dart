@@ -38,6 +38,7 @@ class _State extends State<ProfileScreen> {
     final Stream<QuerySnapshot> _postsStream = FirebaseFirestore.instance
         .collection('post/')
         .where('uid', isEqualTo: uid)
+        .orderBy('date', descending: true)
         .snapshots();
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),

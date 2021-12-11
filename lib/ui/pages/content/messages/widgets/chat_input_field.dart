@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChatInputField extends StatefulWidget {
-  final String chatRoomId;
+  final String? chatRoomId;
+
+  final String name;
   const ChatInputField({
     Key? key,
-    required this.chatRoomId,
+    this.chatRoomId,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -54,11 +57,29 @@ class _ChatInputFieldState extends State<ChatInputField> {
               )),
               IconButton(
                   onPressed: () async {
+                    dynamic userData;
+                    await controllerChat
+                        .getChatRoom(controllerChat.getChatRoomId(
+                            controllerUser.user[0].name, widget.name))
+                        .then((value) {
+                      userData = value;
+                    });
+                    String? chatId = widget.chatRoomId;
+                    userData.data() == null
+                        ? await controllerChat
+                            .createChatRoomAndStartConversation(
+                                controllerUser.user[0].name, widget.name)
+                        : null;
+
+                    chatId = controllerChat.getChatRoomId(
+                        controllerUser.user[0].name, widget.name);
+
                     await controllerChat.sendMessage(
-                        widget.chatRoomId,
+                        chatId!,
                         _messageController.text,
                         controllerUser.user[0].name,
                         DateTime.now().toString());
+
                     _messageController.clear();
                   },
                   icon: const Icon(Icons.send),

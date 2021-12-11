@@ -38,6 +38,7 @@ class _State extends State<ChatScreen> {
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               Map<String, dynamic> data =
                   document.data()! as Map<String, dynamic>;
+
               String secondUser = data['chatroomid']
                   .replaceAll("_", "")
                   .replaceAll(controllerUser.user[0].name, "");
@@ -56,26 +57,46 @@ class _State extends State<ChatScreen> {
                     }
                     dynamic user =
                         snapshot.data!.docs[0].data() as Map<String, dynamic>;
-                    return ChatCard(
-                      title: user['name'],
-                      press: () async {
-                        await controllerChat.createChatRoomAndStartConversation(
-                            controllerUser.user[0].name, user['name']);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Messages(
-                                      chatRoomId: controllerChat.getChatRoomId(
-                                          controllerUser.user[0].name,
-                                          user['name']),
-                                      isActivate: user['isActive'],
-                                      name: user['name'],
-                                      picUrl: user['profilePic'],
-                                    )));
+
+                    return StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("ChatRoom")
+                          .doc(data['chatroomid'])
+                          .collection('chats')
+                          .orderBy("date", descending: true)
+                          .limit(1)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError)
+                          return Text('Error = ${snapshot.error}');
+
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+                        dynamic lastMessage = snapshot.data!.docs[0].data()
+                            as Map<String, dynamic>;
+
+                        return ChatCard(
+                            title: user['name'],
+                            press: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Messages(
+                                            chatRoomId: data['chatroomid'],
+                                            isActivate: user['isActive'],
+                                            name: user['name'],
+                                            picUrl: user['profilePic'],
+                                          )));
+                            },
+                            picUrl: user['profilePic'],
+                            isActive: user['isActive'],
+                            content: lastMessage['sendBy'] ==
+                                    controllerUser.data[0].name
+                                ? 'You: ' + lastMessage['message']
+                                : lastMessage['message']);
                       },
-                      picUrl: user['profilePic'],
-                      isActive: user['isActive'],
-                      content: '',
                     );
                   });
             }).toList(),

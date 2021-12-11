@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crypto_link/data/models/chat_messages.dart';
 import 'package:crypto_link/domain/controller/chat_controller.dart';
 import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +8,10 @@ import 'chat_input_field.dart';
 import 'one_message.dart';
 
 class BodyMessages extends StatefulWidget {
-  final String picUrl, chatRoomId;
-  const BodyMessages({Key? key, required this.picUrl, required this.chatRoomId})
+  final String picUrl, name;
+  final String? chatRoomId;
+  const BodyMessages(
+      {Key? key, required this.picUrl, this.chatRoomId, required this.name})
       : super(key: key);
 
   @override
@@ -20,6 +21,7 @@ class BodyMessages extends StatefulWidget {
 class _BodyMessagesState extends State<BodyMessages> {
   ChatController controllerChat = Get.find();
   UserController controllerUser = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -41,7 +43,8 @@ class _BodyMessagesState extends State<BodyMessages> {
                     child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
                 )),
-                ChatInputField(chatRoomId: widget.chatRoomId),
+                ChatInputField(
+                    chatRoomId: widget.chatRoomId, name: widget.name),
               ],
             );
           }
@@ -68,7 +71,7 @@ class _BodyMessagesState extends State<BodyMessages> {
                       );
                     }),
               )),
-              ChatInputField(chatRoomId: widget.chatRoomId),
+              ChatInputField(chatRoomId: widget.chatRoomId, name: widget.name),
             ],
           );
         });

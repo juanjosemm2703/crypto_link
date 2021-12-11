@@ -72,6 +72,7 @@ class ChatCard extends StatelessWidget {
                           content,
                           textAlign: TextAlign.left,
                           style: Theme.of(context).textTheme.bodyText1,
+                          maxLines: 2,
                         ),
                       ],
                     ),
