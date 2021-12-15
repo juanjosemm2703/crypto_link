@@ -6,7 +6,7 @@ import 'dart:convert';
 class ApiService {
   Future<List<Data>> getData() async {
     var url = Uri.parse(
-        'https://newsapi.org/v2/everything?q=cryptocurrency&apiKey=05ec8b950e1943938909d09e98e9c396');
+        'https://newsapi.org/v2/everything?q=cryptocurrency&sortBy=publishedAt&apiKey=05ec8b950e1943938909d09e98e9c396');
 
     Response response = await get(url);
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
 import 'package:crypto_link/data/models/location.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LocationController extends GetxController {
   late Rx<LocationClass> _location = LocationClass(
@@ -77,5 +78,21 @@ class LocationController extends GetxController {
 
   Future uploadLocation(String uid, LocationClass newLocation) async {
     await userCollection.doc(uid).update(newLocation.toJson());
+  }
+
+  getLocations(String uid) {
+    return userCollection.where('uid', isNotEqualTo: uid).snapshots();
+  }
+
+  double getDistanceBetweenKm(
+      {required double startLatitude,
+      required double startLongitude,
+      required double endLatitude,
+      required double endLongitude}) {
+    double distanceInKMeters = Geolocator.distanceBetween(
+        startLatitude, startLongitude, endLatitude, endLongitude);
+
+    distanceInKMeters = distanceInKMeters / 1000;
+    return distanceInKMeters;
   }
 }

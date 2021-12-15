@@ -1,62 +1,58 @@
+import 'package:crypto_link/ui/widgets/card.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NotificationCard extends StatelessWidget {
-  final String title, picUrl, content;
+  final String title, content, picUrl;
+  final dynamic latitude, longitude;
 
   // StateCard constructor
-  const NotificationCard(
-      {Key? key,
-      required this.title,
-      required this.picUrl,
-      required this.content})
-      : super(key: key);
+  const NotificationCard({
+    Key? key,
+    required this.title,
+    required this.latitude,
+    required this.longitude,
+    required this.content,
+    required this.picUrl,
+  }) : super(key: key);
+
+  Widget getIconButton(primaryColor, latitude, longitude) {
+    return IconButton(
+        onPressed: () async {
+          final url = "https://www.google.es/maps?q=$latitude,$longitude";
+          await launch(url);
+        },
+        icon: Icon(
+          Icons.gps_fixed_sharp,
+          color: primaryColor,
+        ));
+  }
 
   // We create a Stateless widget that contais an AppCard,
   // Passing all the customizable views as parameters
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        padding: const EdgeInsets.only(
-            top: 4.0, bottom: 10.0, left: 8.0, right: 8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                SizedBox(
-                  height: 70.0,
-                  width: 80.0,
-                  child: Center(
-                    child: CircleAvatar(
-                      minRadius: 30.0,
-                      maxRadius: 30.0,
-                      backgroundImage: NetworkImage(picUrl),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.bodyText1,
-                              children: <TextSpan>[
-                            TextSpan(
-                                text: title,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            TextSpan(text: content)
-                          ])),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
+    Color primaryColor = Theme.of(context).colorScheme.primary;
+    return AppCard(
+      title: title,
+      content: Text(
+        content,
+        style: Theme.of(context).textTheme.bodyText1,
+      ),
+      // topLeftWidget widget as an Avatar
+      topLeftWidget: SizedBox(
+        height: 48.0,
+        width: 48.0,
+        child: Center(
+          child: CircleAvatar(
+            minRadius: 14.0,
+            maxRadius: 14.0,
+            backgroundImage: NetworkImage(picUrl),
+          ),
         ),
       ),
+      topRightWidget: getIconButton(primaryColor, latitude, longitude),
+      // topRightWidget widget as an IconButton
     );
   }
 }

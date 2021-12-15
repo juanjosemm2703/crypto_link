@@ -159,8 +159,8 @@ class _State extends State<ContentPage> {
                 label: 'Chat',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.notifications_none_outlined),
-                label: 'Notifications',
+                icon: Icon(Icons.gps_fixed),
+                label: 'Locations',
               ),
             ],
             currentIndex: _selectedIndex,

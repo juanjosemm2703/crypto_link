@@ -27,17 +27,18 @@ class _SearchScreenState extends State<SearchScreen> {
           if (snapshot.hasError) print(snapshot.error);
           if (snapshot.hasData) {
             final datos = snapshot.data as List<Data>;
+
             return Column(
               children: <Widget>[
                 PrincipleNew(post: datos[0]),
                 ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 10,
+                    itemCount: datos.length,
                     itemBuilder: (context, index) {
                       return SearchCard(
                           date: datos[index].publishedAt,
-                          onNews: () {},
+                          url: datos[index].url,
                           picUrl: datos[index].urlToImage,
                           title: datos[index].title);
                     })

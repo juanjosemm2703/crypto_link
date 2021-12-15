@@ -48,6 +48,8 @@ dependencies:
   fake_cloud_firestore: 
   location:
   geocoding:
+  geolocator:
+  url_launcher:
   
 dev_dependencies:
   flutter_test:

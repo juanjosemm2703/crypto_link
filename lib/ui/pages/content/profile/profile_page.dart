@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto_link/data/models/location.dart';
 import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/domain/controller/location_controller.dart';
 import 'package:crypto_link/domain/controller/user_controller.dart';
@@ -110,23 +111,35 @@ class _State extends State<ProfileScreen> {
                   style: Theme.of(context).textTheme.headline1),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                    child: Icon(Icons.location_on,
-                        size: 18, color: Theme.of(context).colorScheme.primary),
-                  ),
-                  Text(
-                      controllerLocation.city +
-                          " , " +
-                          controllerLocation.country,
-                      textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.headline3),
-                ],
-              ),
-            ),
+                padding: const EdgeInsets.all(10.0),
+                child: controllerLocation.city != ""
+                    ? Row(
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              LocationClass newLocation =
+                                  controllerLocation.location;
+
+                              await controllerLocation.uploadLocation(
+                                  controllerAuth.getUid(), newLocation);
+                            },
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
+                              child: Icon(Icons.location_on,
+                                  size: 22,
+                                  color: Theme.of(context).colorScheme.primary),
+                            ),
+                          ),
+                          Obx(() => Text(
+                              controllerLocation.city +
+                                  " , " +
+                                  controllerLocation.country,
+                              textAlign: TextAlign.left,
+                              style: Theme.of(context).textTheme.headline3)),
+                        ],
+                      )
+                    : Container()),
             StreamBuilder<QuerySnapshot>(
                 stream: _postsStream,
                 builder: (BuildContext context,
