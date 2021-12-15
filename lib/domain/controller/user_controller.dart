@@ -12,9 +12,9 @@ class UserController extends GetxController {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('user');
 
-  Future addUserData(
+  Future<void> addUserData(
       String name, String profilePic, String email, String uid) async {
-    return await userCollection.doc(uid).set({
+    await userCollection.doc(uid).set({
       'name': name,
       'profilePic': profilePic,
       'email': email,
@@ -22,33 +22,28 @@ class UserController extends GetxController {
     });
   }
 
-  changeUserState(bool isActive, String uid) async {
-    await FirebaseFirestore.instance
-        .collection('user')
-        .doc(uid)
-        .update({'isActive': isActive});
+  Stream<QuerySnapshot> snapshotUserByName(name) {
+    return userCollection.where('name', isEqualTo: name).snapshots();
+  }
+
+  Future<void> changeUserState(bool isActive, String uid) async {
+    await userCollection.doc(uid).update({'isActive': isActive});
   }
 
   updateUserData(String uid) async {
     user.clear();
-    final DocumentReference _user =
-        FirebaseFirestore.instance.collection('user').doc(uid);
+    final DocumentReference _user = userCollection.doc(uid);
     await _user.get().then((value) => {user.add(User.fromSnapshot(value))});
-    print(user.length);
   }
 
   updateUserDataBySignUp(User _user) {
     user.clear();
     user.add(_user);
-    print(user.length);
   }
 
   updateProfilePic(uid, {required File file}) async {
     String url = await uploadImage(uid, file);
-    await FirebaseFirestore.instance
-        .collection('user')
-        .doc(uid)
-        .update({'profilePic': url});
+    await userCollection.doc(uid).update({'profilePic': url});
     updateImage(url);
     // await updateUserData(uid);
   }

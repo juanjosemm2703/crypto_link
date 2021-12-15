@@ -45,7 +45,7 @@ class _State extends State<SignUp> {
     print('_login $theEmail $thePassword $username');
     try {
       await controllerAuth.signUp(theEmail, thePassword, username);
-      Get.toNamed('/content');
+
       await controllerUser.addUserData(
           username,
           'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png',
@@ -59,6 +59,7 @@ class _State extends State<SignUp> {
           uid: controllerAuth.getUid());
       await controllerUser.updateUserDataBySignUp(_user);
       await controllerUser.changeUserState(true, controllerAuth.getUid());
+      Get.toNamed('/content');
     } catch (err) {
       print(err.toString());
       Get.snackbar(

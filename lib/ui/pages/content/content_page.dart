@@ -1,4 +1,5 @@
 import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/location_controller.dart';
 import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/online/onlinechat_screen.dart';
 import 'package:crypto_link/ui/pages/content/post/new_post.dart';
@@ -11,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'chat/chat_pages.dart';
 import 'notifications/notifications_page.dart';
+import 'package:crypto_link/data/models/location.dart';
 
 class ContentPage extends StatefulWidget {
   final int? index;
@@ -32,11 +34,14 @@ class _State extends State<ContentPage> {
 
   @override
   void initState() {
+    LocationController controllerLocation = Get.find();
     if (index != null) {
       _selectedIndex = index!;
       _onItemTapped(_selectedIndex);
     }
     super.initState();
+    controllerLocation.obtenerubicacion();
+    location();
   }
 
   void _onItemTapped(int index) {
@@ -95,13 +100,20 @@ class _State extends State<ContentPage> {
     } else {
       preferences.setBool('isLight', false);
     }
-    print(preferences.get('isLight'));
+  }
+
+  Future<void> location() async {
+    LocationController controllerLocation = Get.find();
+    AuthController controllerAuth = Get.find();
+    LocationClass newLocation = controllerLocation.location;
+
+    await controllerLocation.uploadLocation(
+        controllerAuth.getUid(), newLocation);
   }
 
   @override
   Widget build(BuildContext context) {
     AuthController controllerAuth = Get.find();
-    // UserController controllerUser = Get.find();
 
     return GetX<UserController>(builder: (controller) {
       return Scaffold(

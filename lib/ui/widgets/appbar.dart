@@ -36,10 +36,6 @@ class CustomAppBar extends AppBar {
                 Icons.brightness_4_rounded,
               ),
               onPressed: setTheme,
-              // () {
-              //   Get.changeThemeMode(
-              //       Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-              // },
             ),
             IconButton(
               icon: const Icon(

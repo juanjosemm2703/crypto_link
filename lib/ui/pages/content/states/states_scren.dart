@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:crypto_link/domain/controller/post_controller.dart';
+import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/states/widgets/state_card.dart';
 
 import 'package:flutter/material.dart';
@@ -16,12 +17,10 @@ class StatesScreen extends StatefulWidget {
 class _State extends State<StatesScreen> {
   AuthController controllerAuth = Get.find();
   PostController controllerPost = Get.find();
+  UserController controllerUser = Get.find();
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> _postsStream = FirebaseFirestore.instance
-        .collection('post/')
-        .orderBy('date', descending: true)
-        .snapshots();
+    final Stream<QuerySnapshot> _postsStream = controllerPost.snapshotPosts();
 
     return StreamBuilder<QuerySnapshot>(
         stream: _postsStream,
@@ -37,10 +36,7 @@ class _State extends State<StatesScreen> {
                 document.data()! as Map<String, dynamic>;
 
             return StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('user')
-                    .where('name', isEqualTo: data['name'])
-                    .snapshots(),
+                stream: controllerUser.snapshotUserByName(data['name']),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError)

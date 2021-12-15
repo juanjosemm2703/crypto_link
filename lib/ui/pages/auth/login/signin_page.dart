@@ -48,6 +48,7 @@ class _State extends State<SignIn> {
       await controllerUser.changeUserState(true, controllerAuth.getUid());
       Get.toNamed('/content');
     } catch (err) {
+      print("estoy aca");
       print(err.toString());
       Get.snackbar(
         "Login",

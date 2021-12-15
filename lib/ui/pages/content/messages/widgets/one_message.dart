@@ -32,8 +32,8 @@ class OneMessage extends StatelessWidget {
           Container(
               constraints: BoxConstraints(
                   maxWidth: isSender
-                      ? MediaQuery.of(context).size.width - 30
-                      : MediaQuery.of(context).size.width - 30 - 24 - 15),
+                      ? screenSize.width - 30
+                      : screenSize.width - 30 - 24 - 15),
               padding: const EdgeInsets.symmetric(
                   horizontal: 15 * 0.75, vertical: 15 / 2),
               child: Text(message),

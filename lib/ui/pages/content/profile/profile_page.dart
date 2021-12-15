@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto_link/domain/controller/auth_controller.dart';
+import 'package:crypto_link/domain/controller/location_controller.dart';
 import 'package:crypto_link/domain/controller/user_controller.dart';
 import 'package:crypto_link/ui/pages/content/profile/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _State extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     UserController controllerUser = Get.find();
     AuthController controllerAuth = Get.find();
+    LocationController controllerLocation = Get.find();
     final uid = controllerAuth.getUid();
     final Stream<QuerySnapshot> _postsStream = FirebaseFirestore.instance
         .collection('post/')
@@ -116,7 +118,10 @@ class _State extends State<ProfileScreen> {
                     child: Icon(Icons.location_on,
                         size: 18, color: Theme.of(context).colorScheme.primary),
                   ),
-                  Text("Barranquilla, Colombia",
+                  Text(
+                      controllerLocation.city +
+                          " , " +
+                          controllerLocation.country,
                       textAlign: TextAlign.left,
                       style: Theme.of(context).textTheme.headline3),
                 ],
