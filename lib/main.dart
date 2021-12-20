@@ -11,26 +11,24 @@ import 'ui/app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  Workmanager().initialize(
-    updatePositionInBackground,
-    isInDebugMode: true,
-  );
-
   await Firebase.initializeApp();
   Get.put(AuthController());
   Get.put(UserController());
   Get.put(PostController());
   Get.put(ChatController());
   Get.put(LocationController());
+  Workmanager().initialize(
+    updatePositionInBackground,
+  );
   runApp(const MyApp());
 }
 
 void updatePositionInBackground() async {
   Workmanager().executeTask((task, inputData) async {
+    await Firebase.initializeApp();
     Get.put(LocationController());
     LocationController controllerLocation = Get.find();
-    await controllerLocation.obtenerubicacion();
+    await controllerLocation.backgroundLocation();
     return Future.value(true);
   });
 }
