@@ -50,6 +50,7 @@ dependencies:
   geocoding:
   geolocator:
   url_launcher:
+  workmanager:
   
 dev_dependencies:
   flutter_test:
@@ -57,8 +58,15 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   test:
+  flutter_launcher_icons:
+  network_image_mock: ^2.0.1
+  
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/icono/crypto-decentralized.png
 
-  network_image_mock: ^2.0.1 
+   
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -79,6 +87,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/icono/crypto-decentralized.png
     - assets/undraw_mobile_ux_re_59hr.svg
     - assets/undraw_access_account_re_8spm.svg
 

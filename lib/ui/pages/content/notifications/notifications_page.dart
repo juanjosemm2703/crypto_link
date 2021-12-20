@@ -35,12 +35,10 @@ class _State extends State<NotificationScreen> {
           }
           if (snapshot.data != null) {
             return ListView(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
-                if (data['latitude'] == null) {
+                if (data['latitude'] == null || data['latitude'] == "") {
                   return Container();
                 }
                 final dynamic latitude = double.parse(data['latitude']);

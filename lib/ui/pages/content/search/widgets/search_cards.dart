@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SearchCard extends StatelessWidget {
-  final String title, picUrl, date, url;
+  final String title, date, url;
+  final dynamic picUrl;
 
   // StateCard constructor
   const SearchCard(
@@ -41,23 +42,28 @@ class SearchCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        height: 80,
-                        width: 80,
-                        imageUrl: picUrl,
-                        placeholder: (context, url) => const SizedBox(
-                          child: CircularProgressIndicator(),
-                          width: 10,
-                          height: 10,
-                        ),
-                        errorWidget: (context, url, error) => const Icon(
+                  picUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            height: 80,
+                            width: 80,
+                            imageUrl: picUrl,
+                            placeholder: (context, url) => const SizedBox(
+                              child: CircularProgressIndicator(),
+                              width: 10,
+                              height: 10,
+                            ),
+                            errorWidget: (context, url, error) => const Icon(
+                              Icons.error,
+                              color: Colors.red,
+                            ),
+                          ))
+                      : const Icon(
                           Icons.error,
                           color: Colors.red,
                         ),
-                      )),
                 ],
               ),
               const SizedBox(

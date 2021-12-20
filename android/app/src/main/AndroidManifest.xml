@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.crypto_link">
    <application
-        android:label="crypto_link"
+        android:label="Crypto Link"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

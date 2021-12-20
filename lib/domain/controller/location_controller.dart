@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto_link/domain/controller/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
@@ -28,6 +29,7 @@ class LocationController extends GetxController {
   String get city => _city.value;
   String get department => _department.value;
   String get country => _country.value;
+  AuthController controllerAuth = Get.find();
 
   Future<void> obtenerubicacion() async {
     late LocationData _posicion;
@@ -72,6 +74,8 @@ class LocationController extends GetxController {
         longitude: _posicionlo.value,
       );
       _location.value = newLocation;
+      await uploadLocation(
+        controllerAuth.getUid(), newLocation);
       print(placemark);
     }
   }

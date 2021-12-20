@@ -10,6 +10,7 @@ import 'package:crypto_link/ui/widgets/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 import 'chat/chat_pages.dart';
 import 'notifications/notifications_page.dart';
 import 'package:crypto_link/data/models/location.dart';
@@ -34,14 +35,17 @@ class _State extends State<ContentPage> {
 
   @override
   void initState() {
-    LocationController controllerLocation = Get.find();
     if (index != null) {
       _selectedIndex = index!;
       _onItemTapped(_selectedIndex);
     }
+    LocationController controllerLocation = Get.find();
     super.initState();
     controllerLocation.obtenerubicacion();
-    location();
+    Workmanager().registerPeriodicTask(
+      "1",
+      "ObtenerUbicacionesPeriodicas",
+    );
   }
 
   void _onItemTapped(int index) {
@@ -106,7 +110,6 @@ class _State extends State<ContentPage> {
     LocationController controllerLocation = Get.find();
     AuthController controllerAuth = Get.find();
     LocationClass newLocation = controllerLocation.location;
-
     await controllerLocation.uploadLocation(
         controllerAuth.getUid(), newLocation);
   }
